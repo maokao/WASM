@@ -1580,7 +1580,7 @@ function isDataURI(filename) {
 
 
 
-var wasmBinaryFile = 'newarray.wasm';
+var wasmBinaryFile = 'create_new_array_by_c.wasm';
 if (!isDataURI(wasmBinaryFile)) {
   wasmBinaryFile = locateFile(wasmBinaryFile);
 }

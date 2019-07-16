@@ -11,7 +11,6 @@ extern "C"
             newArray[i]=i;
         }
 
-        //return &newArray[0];
         return newArray;
     }
  

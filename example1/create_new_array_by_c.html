@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>wasm_md5</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="create_new_array_by_c.js"></script>
+    <script>
+//**go to emsdk folder
+//source ./emsdk_env.sh --build=Release  
+//**go to project folder  
+//emcc create_new_array_by_c.cpp -s "EXPORTED_FUNCTIONS=['_getArray']" -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']" -o create_new_array_by_c.js
+//emrun --no_browser --port 8000 .
+
+Module['onRuntimeInitialized'] = onRuntimeInitialized;
+
+// 釋放一塊wasm記憶體
+function freeHeap(heapBytes) {
+    Module._free(heapBytes.byteOffset);
+}
+
+function onRuntimeInitialized() {
+
+    var len = 6;
+    const ptr = Module._malloc(len*Int32Array.BYTES_PER_ELEMENT);
+
+    var newptr = Module.ccall(
+        "getArray",
+        "number",
+        ["number"],
+        [len]
+      );
+
+    var output_array = new Int32Array(Module.HEAP32.buffer, newptr, len);
+    
+    console.log(output_array);
+
+    freeHeap(ptr);
+}
+    </script>
+  </body>
+</html>
