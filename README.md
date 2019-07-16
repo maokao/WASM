@@ -5,9 +5,7 @@
 > 
 > 經過多次的測試，決定還是乖乖地使用Emscripten的emcc來編譯C++程式碼，產生出.js與.wasm，然後再編寫html檔。想不到這解決了許多之前完全手動load wasm檔的問題，或者應該說不太需要顧慮那些問題，因為Emscripten自動產生的膠水語言(glue language)-.js檔，都幫你處理掉了(或許？)。而且程式也變得簡單乾淨許多，寫起來沒那麼挫折。
 > 
-> 另外，因為我的開發環境在Mac上，原本都是用Apache來當web server，但是會發現某些js方的WASM的寫法，會產生MIME TYPE的error。而這情況也會發生在利用emcc編譯出的js檔上。因此目前強力建議還是利用Emscripten所附帶的web server。方法為：到你project的目錄下，利用以下指令來啟動。
-> 
-> `emrun --no_browser --port 8000 .`
+> 另外，因為我的開發環境在Mac上，原本都是用Apache來當web server，但是會發現某些js方的WASM的寫法，會產生MIME TYPE的error。而這情況也會發生在利用emcc編譯出的js檔上。因此目前強力建議還是利用Emscripten所附帶的web server。
 > 
 ## 使用方式說明
 安裝Emscripten的部分，在此先跳過，有空再補上。
@@ -16,6 +14,8 @@
 2. 編譯cpp檔成wasm和產生js的glue language。  
 `emcc cpp檔名 -s "EXPORTED_FUNCTIONS=['_你要給js呼叫的function名']" -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']" -o 要產生的js檔名`
 3. 撰寫html/js檔。
-4. 啟動Emscripten所附帶的web server，看結果囉。 
+4. 啟動Emscripten所附帶的web server，看結果囉。  
+`emrun --no_browser --port 8000 .`
+
 
 未完
