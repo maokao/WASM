@@ -14,8 +14,8 @@
 當你安裝好Emscripten後，要做的事順序如下：
 1. 撰寫cpp檔。
 2. 編譯cpp檔成wasm和產生js的glue language。
-> `emcc cpp檔名 -s "EXPORTED_FUNCTIONS=['_你要給js呼叫的function名']" -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']" -o 要產生的js檔名`
-> 3. 撰寫html/js檔。
-> 4. 啟動Emscripten所附帶的web server，看結果囉。
-> 
-> 未完
+`emcc cpp檔名 -s "EXPORTED_FUNCTIONS=['_你要給js呼叫的function名']" -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']" -o 要產生的js檔名`
+3. 撰寫html/js檔。
+4. 啟動Emscripten所附帶的web server，看結果囉。 
+
+未完
