@@ -4,10 +4,10 @@
     <title>wasm_example</title>
   </head>
   <body>
-    <script type="text/javascript" src="input_array_output_array.js"></script>
+    <script type="text/javascript" src="input_2darray.js"></script>
     <script>
-
-//emcc input_array_output_array.cpp -s "EXPORTED_FUNCTIONS=['_getArray']" -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']" -o input_array_output_array.js
+ 
+//emcc input_2darray.cpp -s "EXPORTED_FUNCTIONS=['_getArray']" -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']" -o input_2darray.js
 //emrun --no_browser --port 8000 .
 
 Module['onRuntimeInitialized'] = onRuntimeInitialized;
@@ -19,28 +19,32 @@ function freeHeap(heapBytes) {
 
 function onRuntimeInitialized() {
 
-  var input_array = new Int32Array([10, 5, -3, 120, -70]); // array of 32-bit signed int to pass
+  var input_array = new Int32Array([1, 2, 3, 4, 5, 11, 12, 13, 14, 15]); // array of 32-bit signed int to pass
   console.log(input_array);
-  var len = input_array.length;                  // 5 elements
+  var nrow = 5;
+  var ncol = 2;
+  var len = nrow * ncol;                  // 5*2 elements
   var bytes_per_element = input_array.BYTES_PER_ELEMENT;   // 4 bytes each element
     
   // alloc memory, in this case 5*4 bytes
   var input_ptr = Module._malloc(len * bytes_per_element);
+  var output_ptr = Module._malloc(nrow * bytes_per_element);
 
   Module.HEAP32.set(input_array, input_ptr / bytes_per_element); // write WASM memory calling the set method of the Int32Array
-
-  var newptr = Module.ccall(
+  
+  Module.ccall(
     "getArray", //c function name
-    "number",   //output type
-    ["number", "number"], //input type
-    [input_ptr, len]       //input value
+    null,   //output type
+    ["number", "number", "number", "number"], //input type
+    [input_ptr, output_ptr, nrow, ncol]       //input value
   );
 
-  var output_array = new Int32Array(Module.HEAP32.buffer, newptr, len);
+  var output_array = new Int32Array(Module.HEAP32.buffer, output_ptr, nrow); // extract data to another JS array
     
   console.log(output_array);
 
   freeHeap(input_ptr);
+  freeHeap(output_ptr);
 }
     </script>
   </body>
